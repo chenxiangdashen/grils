@@ -1,1 +1,7 @@
 /* Write your styles */
+
+.am-btn-primary {
+    color: #fff;
+    background-color: #6371cf;
+    border-color: #0e90d2;
+}

@@ -1,0 +1,90 @@
+{
+  "success": true,
+  "message": "操作成功",
+  "data": [
+    {
+      "onClick": "1",
+      "XAT_Corporation": "1001000203IX02CKPI01",
+      "XAT_Top": "4006000101IZGRL94N01",
+      "XAT_ID": "4006000101IZGRL94N01",
+      "XAT_ObjectTypeID": "2005000004IDRECO4707",
+      "XAT_Code": "4006000101IZGRL94N01",
+      "XAT_Name": "组织-1",
+      "icon_tree": "icon-top-virt",
+      "XAT_StorageType": "VIRT",
+      "XAT_ChildIndex": 0,
+      "XAT_HasChildren": "1",
+      "XAT_InheritGrant": "1",
+      "XAT_Share": null,
+      "children": [
+        {
+          "onClick": "1",
+          "XAT_Corporation": "1001000203IX02CKPI01",
+          "XAT_Top": "4006000101IZGRL94N01",
+          "XAT_ID": "4006000101IZGRLD1A01",
+          "XAT_ObjectTypeID": "2005000004IDRECO4708",
+          "XAT_Code": "4006000101IZGRLD1A01",
+          "XAT_Parent": "4006000101IZGRL94N01",
+          "icon_tree": "icon-stor",
+          "XAT_Name": "测试",
+          "XAT_StorageType": "STOR",
+          "XAT_ChildIndex": 1,
+          "XAT_HasChildren": null,
+          "XAT_InheritGrant": "1",
+          "XAT_Share": "0",
+          "partNum": 0,
+          "children": [
+            {
+              "onClick": "1",
+              "XAT_Corporation": "1001000203IX02CKPI01",
+              "XAT_Top": "4006000101IZGRL94N01",
+              "XAT_ID": "4006000101IZGRM1S801",
+              "XAT_ObjectTypeID": "2005000004IDRECO4708",
+              "XAT_Code": "4006000101IZGRM1S801",
+              "XAT_Parent": "4006000101IZGRLUQS01",
+              "icon_tree": "icon-stor",
+              "XAT_Name": "测试-2",
+              "XAT_StorageType": "STOR",
+              "XAT_ChildIndex": 2,
+              "XAT_HasChildren": null,
+              "XAT_InheritGrant": "1",
+              "XAT_Share": "0",
+              "partNum": 0
+            }
+          ]
+        },
+        {
+          "XAT_Corporation": "1001000203IX02CKPI01",
+          "XAT_Top": "4006000101IZGRL94N01",
+          "XAT_ID": "4006000101IZGRLUQS01",
+          "XAT_ObjectTypeID": "2005000004IDRECO4708",
+          "XAT_Code": "4006000101IZGRLUQS01",
+          "XAT_Parent": "4006000101IZGRL94N01",
+          "icon_tree": "icon-virt",
+          "XAT_Name": "组织-2",
+          "XAT_StorageType": "VIRT",
+          "XAT_ChildIndex": 1,
+          "XAT_HasChildren": "1",
+          "XAT_InheritGrant": "1",
+          "XAT_Share": null
+        }
+      ]
+    },
+    {
+      "onClick": "1",
+      "XAT_Corporation": "1001000203IX02CKPI01",
+      "XAT_Top": "4006000103IX041BZF01",
+      "XAT_ID": "4006000103IX041BZF01",
+      "XAT_ObjectTypeID": "2005000004IDRECO4707",
+      "XAT_Code": "4006000103IX041BZF01",
+      "XAT_Name": "零件",
+      "icon_tree": "icon-top-stor",
+      "XAT_StorageType": "STOR",
+      "XAT_ChildIndex": 0,
+      "XAT_HasChildren": null,
+      "XAT_InheritGrant": "1",
+      "XAT_Share": "1",
+      "partNum": 4
+    }
+  ]
+}
