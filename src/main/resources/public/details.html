@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1">
+    <title></title>
+    <link rel="stylesheet" href="assets/css/amazeui.css"/>
+
+</head>
+<body>
+
+<div class="am-tabs" id="doc-my-tabs">
+    <ul class="am-tabs-nav am-nav am-nav-tabs am-nav-justify">
+        <li class="am-active"><a href="">属性</a></li>
+        <li><a href="">3D</a></li>
+        <li><a href="">BOM</a></li>
+        <li><a href="">批注</a></li>
+    </ul>
+    <div class="am-tabs-bd">
+        <div class="am-tab-panel am-active">asdfsf</div>
+        <div class="am-tab-panel">
+            <iframe src="/list.html" width="100%" height="100%" frameborder="0"></iframe>
+        </div>
+        <div class="am-tab-panel">aaaaaaaaaaaaa</div>
+    </div>
+</div>
+
+</body>
+
+
+<script src="assets/js/jquery.min.js"></script>
+<script src="assets/js/handlebars.min.js"></script>
+<script type="text/x-handlebars-template" id="tpi-list-item">
+    {{#each this}}
+    <li class="am-list-item-desced" data-id="{{id}}">
+        <a href="{{alt}}" class="am-list-item-hd" target="_blank">{{title}}</a>
+
+        <div class="am-list-item-text">{{content}}</div>
+    </li>
+    {{/each}}
+</script>
+<script src="assets/js/amazeui.min.js"></script>
+<script>
+    $(function() {
+        $('#doc-my-tabs').tabs();
+    })
+</script>
+
+</html>
+<!--http://pnc.co.il/dev/iscroll-5-pull-to-refresh-and-infinite-demo.html-->

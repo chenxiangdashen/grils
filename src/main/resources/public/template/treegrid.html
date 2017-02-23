@@ -1,0 +1,43 @@
+<style type="text/css"></style>
+<div class="t-table t-tree" style="padding-bottom: 2px;">
+    <!-- 列样式 -->
+    <!--<style type="text/css" t-tree="true"></style>-->
+    <script id="b-tree-table" type="text/ng-template">
+        <tr ng-repeat-start="row in (_parent.children || tableConf.data)" ng-mousedown="rowMouseDown(row, $event)" ng-mouseenter="rowMouseEnter(row,$event)" ng-mouseleave="rowMouseLeave(row,$event)"  ng-click="tableConf.onClick(row, $event)"
+            ng-class="{selected: row._selected}"
+            ng-class="{'icon-loading': node._isLoad,'icon-b-tree-expanded': !node.close, 'icon-b-tree-collapsed': node.close, 'clean-icon': !node.children.length && !node._hasChild}"
+            ng-init="row.level = level; row._parent = _parent; _style = {'margin-left': level * 13}">
+            <td ng-repeat="col in tableConf.columns" class="t-tree-{{index}}-{{col.field}}">
+                <!-- 可以使用 格式化某列指令 tFormatCol-->
+                <!--<td ng-repeat="col in tableConf.columns"><div show-transclude></div><div ng-if="!isFormat">{{row[col.field]}}</div></td>-->
+                <div show-transclude></div>
+                <div ng-if="!isFormat && col.field !== tableConf.treeField">{{row[col.field]}}</div>
+                <div ng-if="!isFormat && col.field == tableConf.treeField">
+                    <i ng-style="_style" ng-click="iconClick(row, $event)" class="icon" ng-class="{'icon-loading': row._isLoad,'icon-b-tree-expanded': !row.close, 'icon-b-tree-collapsed': row.close, 'clean-icon': !row.children.length && !row._hasChild}"></i><span>{{row[col.field]}}</span>
+                </div>
+            </td>
+        </tr>
+        <tr ng-repeat-end ng-if="row.children.length && !row.close">
+            <td colspan="{{tableConf.columns.length}}" class="baidu">
+                <div class="t-tree-child">
+                    <table ng-include="'b-tree-table'" ng-init="level=row.level + 1; _parent=row;" border="0" cellspacing="0" cellpadding="0"></table>
+                </div>
+            </td>
+        </tr>
+
+    </script>
+    <!-- 右键菜单 -->
+    <ul ng-if="menuConf" t-menu="menuConf"></ul>
+
+    <!-- 数据展示区域 -->
+    <table border="0" cellspacing="0" cellpadding="0">
+        <thead>
+        <tr>
+            <td class="t-tree-{{index}}-{{col.field}}" ng-repeat="col in tableConf.columns"><div>{{col.title}}</div></td>
+        </tr>
+        </thead>
+        <tbody ng-if="tableConf.data" ng-include="'b-tree-table'" ng-init="level=0; _parent=null;">
+
+        </tbody>
+    </table>
+</div>

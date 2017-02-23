@@ -29,7 +29,7 @@
           "XAT_Name": "测试",
           "XAT_StorageType": "STOR",
           "XAT_ChildIndex": 1,
-          "XAT_HasChildren": null,
+          "XAT_HasChildren": 1,
           "XAT_InheritGrant": "1",
           "XAT_Share": "0",
           "partNum": 0,
@@ -64,7 +64,7 @@
           "XAT_Name": "组织-2",
           "XAT_StorageType": "VIRT",
           "XAT_ChildIndex": 1,
-          "XAT_HasChildren": "1",
+          "XAT_HasChildren": null,
           "XAT_InheritGrant": "1",
           "XAT_Share": null
         }

@@ -5,3 +5,17 @@
     background-color: #6371cf;
     border-color: #0e90d2;
 }
+.t-table table{width: 100%; background-color: transparent; color: #242424; font-size: 12px;}
+.t-table table tr{line-height: 35px; /* text-align: center; */ cursor: default;}
+.t-table table tr table{background-color: #f1f1f1;}
+.t-table table thead tr{border-top: 1px solid #e8e8e8;}
+.t-table table tbody tr:hover{background-color: #d5dbec;}
+.t-table table tbody tr.min-table:hover{background-color: #f1f1f1;}
+.t-table table tbody tr.selected{background-color: #49538d;color: #fff;}
+.t-table table tbody td{text-align: left;}
+
+.t-tree td{text-align: left;}
+.t-tree td>div{padding-left: 2px;}
+.t-tree .t-tree-child{margin-top: -1px; margin-bottom: -1px; padding-left: 0;}
+.t-tree .icon{width: 16px; height: 16px; display: inline-block; vertical-align: middle; cursor: pointer}
+.t-tree .clean-icon{background: none;}

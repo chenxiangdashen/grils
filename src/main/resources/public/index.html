@@ -1,9 +1,9 @@
 <!doctype html>
-<html class="no-js">
+<html ng-app="index">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Amaze UI Widget</title>
+    <title>首页</title>
     <meta name="description" content="">
     <meta name="keywords" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -16,50 +16,117 @@
 <body>
 <!-- Header -->
 <header>
-    <div class=""></div>
-    <div class="am-form-group am-form-icon am-form-feedback">
-        <i class="am-icon-search"></i>
-        <input type="text" class="am-form-field" placeholder="日期">
+    <div class="am-container">
+        <div class="am-form-group am-form-icon am-form-feedback">
+            <i class="am-icon-search"></i>
+            <input type="text" class="am-form-field" placeholder="日期">
+        </div>
     </div>
-</header>
 
-<div id="tableList">
-    <ul class="am-list admin-sidebar-list" id="collapase-nav-1">
-    </ul>
-</div>
+</header>
+<section ng-controller="index.left">
+    <div ng-if="treeConf" t-tree="treeConf"  ng-cloak>
+        <div t-format-col="icon" style="text-align: center">
+            <div ng-if="row.children.length || row._hasChild" class="btn"
+                 ng-class="{close: row.close, open: !row.close}"></div>
+            <div ng-if="!row.children.length && !row._hasChild" class="" style="text-align: center">
+                <ooo ng-bind="row.partNum"></ooo></div>
+        </div>
+
+        <div t-format-col="XAT_Name" style="min-width: 200px;position: relative">
+                    <span ng-style="{'margin-left': level * 13 + 25}"><span
+                            class="icon20-file-span {{row.icon_tree}}"></span><ooo ng-bind="row[col.field]"></ooo></span>
+
+            <div ng-show="row._moveIn" class="btn edit" ng-class=""
+                 ng-click="tableScope.$parent.editFolder(row,$event)"></div>
+        </div>
+    </div>
+</section>
+
+
+<!--<div id="tableList">-->
+    <!--<ul class="am-list admin-sidebar-list" id="collapase-nav-1">-->
+    <!--</ul>-->
+<!--</div>-->
 
 <script src="assets/js/jquery.min.js"></script>
 <script src="assets/js/amazeui.min.js"></script>
 <script src="assets/js/handlebars.min.js"></script>
+<script src="js/plugin/angular.js"></script>
+<script src="js/plugin/angular-tool.js"></script>
 
 <script src="assets/js/app.js"></script>
 
-<script id="table-template" type="text/x-handlebars-template">
-
-        {{#each data}}
-            <li class="am-panel">
-                <a data-am-collapse="{parent: '#collapase-nav-1', target: '#role-nav'}">
-                    <i class="am-icon-table am-margin-left-sm"></i> 角色管理 <i
-                        class="am-icon-angle-right am-fr am-margin-right"></i>
-                </a>
-                <ul class="am-list am-collapse admin-sidebar-sub" id="role-nav">
-                    <li><a href="#/roleAdd"><span class="am-icon-table am-margin-left-sm"></span> 添加角色 </a></li>
-                    <li><a href="#/roleList/0"><span class="am-icon-table am-margin-left-sm"></span> 角色列表 </a></li>
-                </ul>
-            </li>
-        {{/each}}
-
-</script>
 
 
 <script type="text/javascript">
-    $.ajax({
-        url: "js/data.json",
-        success: function (data) {
-            var myTemplate = Handlebars.compile($("#table-template").html());
-            $('#collapase-nav-1').html(myTemplate(data));
-        }
-    })
+
+
+    (function(){
+        var index = angular.module('index',['tools']);
+        // 初始化
+        index.run(['$rootScope', '$http', function($rootScope, $http){
+            // 将语言数据放到根作用域
+            // 当前显示窗口管理
+            $rootScope.winShow = {
+                load: {},
+                current: 'index',
+                // 页面参数
+                params: {},
+                // 显示时的回调
+                onShow: {}
+            };
+        }]);
+
+
+        index.controller('index.left',['$scope',function($scope){
+            $scope.reloadTree = function(){
+                if(!window.top.treeConf){
+                    window.top.treeConf = $scope.treeConf = {
+                        columns: [
+                            {field: "XAT_Name", width: 245},
+                            {field: "icon",width:30}
+                        ],
+                        //data: data.data,
+                        url:'js/data.json',
+                        onLoadBef: function(param, node){
+
+                        },
+                        // 开始加载之前的事件
+                        loadFilter: function(data){
+                            app.eachTree(data.data, function(node, parent, index, level){
+
+                                this.icon_tree = 'icon-folder ' + this.icon_tree;
+                                if(!this.XAT_HasChildren){
+                                    this._hasChild = false;
+                                }else{
+                                    this._hasChild = true;
+                                }
+                                if(!this.children){
+                                    this.close = true;
+                                    this.children = [];
+                                }
+                            });
+                            return data
+                        },
+                        onClick:function(row){
+                            // 判断要展开还是要刷新右侧数据
+                            if(row.XAT_HasChildren){
+                                $scope.treeConf.iconClick(row);
+                            }else{
+                                window.location.href='list.html';
+                            }
+
+                        }
+                    };
+                }else{
+                    window.top.treeConf.load();
+                }
+            };
+
+            $scope.reloadTree()
+        }]);
+    })();
 
 
 </script>
