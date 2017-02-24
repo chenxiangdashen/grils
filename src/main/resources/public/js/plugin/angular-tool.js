@@ -236,6 +236,7 @@
                         }
                     }
                 } else {
+                    console.log(data.data)
                     scope.data = curConf.data = data.rows || data.data;
                 }
 

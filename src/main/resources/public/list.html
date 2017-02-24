@@ -63,7 +63,7 @@
             </a>
         </div>
         <h1 class="am-header-title">
-            内饰
+
         </h1>
     </header>
 
@@ -82,6 +82,15 @@
                     </div>
                 </li>
             </ul>
+
+
+            <!--<ul id="events-list" data-am-widget="gallery" class="am-gallery am-avg-sm-2 am-avg-md-3 am-avg-lg-4 am-gallery-default" data-am-gallery="{ pureview: true }">-->
+                <!--<li class="am-list-item-desced">-->
+                    <!--<div class="am-list-item-text">-->
+                        <!--正在加载内容...-->
+                    <!--</div>-->
+                <!--</li>-->
+                <!--<ul>-->
             <div class="pull-action" id="pull-up">
         <span class="am-icon-arrow-down pull-label"
               id="pull-up-label"> 上拉加载更多</span>
@@ -94,26 +103,43 @@
 <script src="assets/js/handlebars.min.js"></script>
 <script type="text/x-handlebars-template" id="tpi-list-item">
     {{#each this}}
-        <!--缩略图在标题左边-->
-        <li class="am-g am-list-item-desced am-list-item-thumbed am-list-item-thumb-left"  data-id="{{id}}">
+        <li class="am-g am-list-item-thumbed am-list-item-thumb-left js-li"  data-id="{{id}}">
             <div class="am-u-sm-4 am-list-thumb">
-                <a href="#" class="">
-                    <img src="{{image}}" alt="{{title}}" class="am-radius" width="140" height="140">
+                <a href="detail.html?id={{id}}" class="">
+                    <img src="{{imgurl}}" alt="{{title}}" class="am-img-responsive" >
                 </a>
             </div>
 
             <div class=" am-u-sm-8 am-list-main">
-                <h3 class="am-list-item-hd"><a href="#" class=""></a>{{subcategory_name}}</h3>
+                <h3 class="am-list-item-hd"><a href="#" class=""></a>{{title}}</h3>
 
-                <div class="am-list-item-text">{{address}}</div>
+                <div class="am-list-item-text">{{ctime}}</div>
 
             </div>
         </li>
+
+        <!--<li>-->
+            <!--<div class="am-gallery-item">-->
+                <!--<a href="{{imgurl}}"-->
+                   <!--class="">-->
+                    <!--<img src="{{imgurl}}" style="width:100%;height:140px;"-->
+                         <!--alt="{{imgurl}}" />-->
+                    <!--<h3 class="am-gallery-title">{{title}}</h3>-->
+                    <!--<div class="am-gallery-desc">{{ctime}}</div>-->
+                <!--</a>-->
+            <!--</div>-->
+        <!--</li>-->
     {{/each}}
 </script>
 <script src="assets/js/amazeui.min.js"></script>
+<script src="assets/js/app.js"></script>
 <script>
+
+
     (function($) {
+
+        $('.am-header-title').text(app.params.title)
+
         var EventsList = function(element, options) {
             var $main = $('#wrapper');
             var $list = $main.find('#events-list');
@@ -123,17 +149,39 @@
             var topOffset = -$pullDown.outerHeight();
 
             this.compiler = Handlebars.compile($('#tpi-list-item').html());
-            this.prev = this.next = this.start = options.params.start;
+            this.prev = this.next = this.page = options.params.page;
             this.total = null;
+
+            function formatterDateTime() {
+                var date=new Date()
+                var month=date.getMonth() + 1
+                var datetime = date.getFullYear()
+                        + ""// "年"
+                        + (month >= 10 ? month : "0"+ month)
+                        + ""// "月"
+                        + (date.getDate() < 10 ? "0" + date.getDate() : date
+                                .getDate())
+                        + ""
+                        + (date.getHours() < 10 ? "0" + date.getHours() : date
+                                .getHours())
+                        + ""
+                        + (date.getMinutes() < 10 ? "0" + date.getMinutes() : date
+                                .getMinutes())
+                        + ""
+                        + (date.getSeconds() < 10 ? "0" + date.getSeconds() : date
+                                .getSeconds());
+                return datetime;
+            }
+
 
             this.getURL = function(params) {
                 var queries = ['callback=?'];
                 for (var key in  params) {
-                    if (key !== 'start') {
+                    if (key !== 'page') {
                         queries.push(key + '=' + params[key]);
                     }
                 }
-                queries.push('start=');
+                queries.push('page=');
                 return options.api + '?' + queries.join('&');
             };
 
@@ -145,30 +193,64 @@
                     $el = $pullUp;
                 }
 
-                $.getJSON(this.URL + start).then(function(data) {
-                    console.log(data);
-                    _this.total = data.total;
-                    var html = _this.compiler(data.events);
-                    if (type === 'refresh') {
-                        $list.children('li').first().before(html);
-                    } else if (type === 'load') {
-                        $list.append(html);
-                    } else {
-                        $list.html(html);
-                    }
 
-                    // refresh iScroll
-                    setTimeout(function() {
-                        _this.iScroll.refresh();
-                    }, 100);
-                }, function() {
-                    console.log('Error...')
-                }).always(function() {
-                    _this.resetLoading($el);
-                    if (type !== 'load') {
-                        _this.iScroll.scrollTo(0, topOffset, 800, $.AMUI.iScroll.utils.circular);
+                $.ajax({
+                    type: 'post',
+                    url: this.URL + start,
+                    data:{
+                        "showapi_timestamp": formatterDateTime()
+                    },
+                    error: function(XmlHttpRequest, textStatus, errorThrown) {
+                        alert("操作失败!");
+                    },
+                    success: function(data) {
+                        _this.total = data.showapi_res_body.total;
+                        var html = _this.compiler(data.showapi_res_body.data);
+
+                        if (type === 'refresh') {
+                            $list.children('li').first().before(html);
+                        } else if (type === 'load') {
+                            $list.append(html);
+                        } else {
+                            $list.html(html);
+                        }
+
+                        // refresh iScroll
+                        setTimeout(function() {
+                            _this.iScroll.refresh();
+                        }, 100);
+                    },
+                    complete:function(){
+                        _this.resetLoading($el);
+                        if (type !== 'load') {
+                            _this.iScroll.scrollTo(0, topOffset, 800, $.AMUI.iScroll.utils.circular);
+                        }
                     }
                 });
+//                $.getJSON(this.URL + start).then(function(data) {
+//                    console.log(data);
+//                    _this.total = data.total;
+//                    var html = _this.compiler(data.events);
+//                    if (type === 'refresh') {
+//                        $list.children('li').first().before(html);
+//                    } else if (type === 'load') {
+//                        $list.append(html);
+//                    } else {
+//                        $list.html(html);
+//                    }
+//
+//                    // refresh iScroll
+//                    setTimeout(function() {
+//                        _this.iScroll.refresh();
+//                    }, 100);
+//                }, function() {
+//                    console.log('Error...')
+//                }).always(function() {
+//                    _this.resetLoading($el);
+//                    if (type !== 'load') {
+//                        _this.iScroll.scrollTo(0, topOffset, 800, $.AMUI.iScroll.utils.circular);
+//                    }
+//                });
             };
 
             this.setLoading = function($el) {
@@ -200,7 +282,7 @@
                 });
 
                 myScroll.on('scrollEnd', function() {
-                    if (pullFormTop && this.directionY === -1) {
+                    if (this.directionY === -1) {
                         _this.handlePullDown();
                     }
                     pullFormTop = false;
@@ -216,7 +298,7 @@
                 console.log('handle pull down');
                 if (this.prev > 0) {
                     this.setLoading($pullDown);
-                    this.prev -= options.params.count;
+                    this.prev -= options.params.page;
                     this.renderList(this.prev, 'refresh');
                 } else {
                     console.log('别刷了，没有了');
@@ -227,27 +309,39 @@
                 console.log('handle pull up');
                 if (this.next < this.total) {
                     this.setLoading($pullUp);
-                    this.next += options.params.count;
+                    this.next += options.params.page;
                     this.renderList(this.next, 'load');
                 } else {
-                    console.log(this.next);
-                    // this.iScroll.scrollTo(0, topOffset);
+                     this.iScroll.scrollTo(0, topOffset);
                 }
             }
         };
 
         $(function() {
-            var app = new EventsList(null, {
-                api: 'https://api.douban.com/v2/event/list',
-                params: {
-                    start: 100,
-                    type: 'music',
-                    count: 10,
-                    loc: 'beijing'
+            var v = new EventsList(null, {
+//                api: 'https://api.douban.com/v2/event/list',
+                api: 'https://route.showapi.com/1208-2',
+                params:{
+                    page:1,
+                    showapi_appid:32612,
+                    rows:10,
+                    type:app.params.id,
+                    showapi_sign:'f8b252ff496140039f71cd83cc31a687'
                 }
+//                params: {
+//                    start: 100,
+//                    type: 'music',
+//                    count: 10,
+//                    loc: 'beijing'
+//                }
             });
-            app.init();
+
+
+
+            v.init();
         });
+
+
 
         document.addEventListener('touchmove', function(e) {
             e.preventDefault();

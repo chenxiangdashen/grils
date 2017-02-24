@@ -33,7 +33,7 @@
                 <ooo ng-bind="row.partNum"></ooo></div>
         </div>
 
-        <div t-format-col="XAT_Name" style="min-width: 200px;position: relative">
+        <div t-format-col="title" style="min-width: 200px;position: relative">
                     <span ng-style="{'margin-left': level * 13 + 25}"><span
                             class="icon20-file-span {{row.icon_tree}}"></span><ooo ng-bind="row[col.field]"></ooo></span>
 
@@ -84,37 +84,42 @@
                 if(!window.top.treeConf){
                     window.top.treeConf = $scope.treeConf = {
                         columns: [
-                            {field: "XAT_Name", width: 245},
+                            {field: "title", width: 245},
                             {field: "icon",width:30}
                         ],
                         //data: data.data,
-                        url:'js/data.json',
+                        url:'https://route.showapi.com/1208-1',
+                        params:{
+                            showapi_appid:32612,
+                            showapi_sign:'f8b252ff496140039f71cd83cc31a687'
+                        },
                         onLoadBef: function(param, node){
 
                         },
                         // 开始加载之前的事件
                         loadFilter: function(data){
-                            app.eachTree(data.data, function(node, parent, index, level){
+                            app.eachTree(data.showapi_res_body.data, function(node, parent, index, level){
 
-                                this.icon_tree = 'icon-folder ' + this.icon_tree;
-                                if(!this.XAT_HasChildren){
-                                    this._hasChild = false;
-                                }else{
-                                    this._hasChild = true;
-                                }
-                                if(!this.children){
-                                    this.close = true;
-                                    this.children = [];
-                                }
+//                                this.icon_tree = 'icon-folder ' + this.icon_tree;
+//                                if(!this.XAT_HasChildren){
+//                                    this._hasChild = false;
+//                                }else{
+//                                    this._hasChild = true;
+//                                }
+//                                if(!this.children){
+//                                    this.close = true;
+//                                    this.children = [];
+//                                }
                             });
-                            return data
+                            return data.showapi_res_body
                         },
                         onClick:function(row){
                             // 判断要展开还是要刷新右侧数据
                             if(row.XAT_HasChildren){
                                 $scope.treeConf.iconClick(row);
                             }else{
-                                window.location.href='list.html';
+                                var url = app.addUrlParams('list.html',{id:row.id,title:row.title});
+                                window.location.href=url;
                             }
 
                         }

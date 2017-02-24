@@ -1,0 +1,80 @@
+<!doctype html>
+<html class="no-js">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="icon" type="image/png" href="assets/i/favicon.png">
+    <link rel="stylesheet" href="assets/css/amazeui.min.css">
+    <link rel="stylesheet" href="assets/css/app.css">
+</head>
+<body>
+<!--[if lte IE 9]>
+<p class="browsehappy">你正在使用<strong>过时</strong>的浏览器，Amaze UI 不提供支持。 请 <a
+        href="http://browsehappy.com/" target="_blank">升级浏览器</a>
+    以获得更好的体验！</p>
+<![endif]-->
+
+<script type="text/x-handlebars-template" id="amz-tpl">
+
+    {{>gallery gallery}}
+
+</script>
+
+<script src="assets/js/jquery.min.js"></script>
+<script src="assets/js/amazeui.js"></script>
+<script src="assets/js/handlebars.min.js"></script>
+<script src="assets/js/amazeui.widgets.helper.js"></script>
+<script src="assets/js/app.js"></script>
+<script>
+    var $tpl = $('#amz-tpl');
+    var source = $tpl.text();
+    var template = Handlebars.compile(source);
+
+    $.ajax({
+        url:'https://route.showapi.com/1208-3',
+        data:{
+            id:app.params.id,
+            showapi_appid:32612,
+            showapi_sign:'f8b252ff496140039f71cd83cc31a687'
+        },
+        success:function(reuslt){
+            var img =[];
+            $.each(reuslt.showapi_res_body.data,function(){
+                img.push({img:this,link:this,title:this,desc:this})
+            })
+            var data = {
+                gallery: {
+                    "options": {
+                        "cols": 2,
+                        "gallery": true
+                    },
+                    "content":img
+                },
+            };
+            var html = template(data);
+            $tpl.before(html);
+        }
+    })
+
+
+
+
+
+
+    /*
+     // 如果 Handlebars 渲染出来的 HTML 在 DOM ready 事件之后插入文档，需要手动初始化组件
+     $.each(['slider', 'menu', 'gallery', 'footer', 'navbar'], function(i, m) {
+     var module = $.AMUI[m];
+     module && module.init && module.init();
+     })
+     */
+</script>
+</body>
+</html>
